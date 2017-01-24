@@ -1,5 +1,5 @@
 
-// the original code of serial Event has been taken from and the URL below and new coded added to decocode GPS signal
+// the original code of serial Event has been taken from and the URL below and new coded added to decocode GPS coordinate signal using arduino board
 // https://www.arduino.cc/en/Tutorial/SerialEvent
 // written for RoboJax.com, Jan 24, 2017 (on the GitHub)
 
