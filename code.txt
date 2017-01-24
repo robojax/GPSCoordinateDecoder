@@ -1,3 +1,73 @@
 
 // the original code of serial Event has been taken from and the URL below and new coded added to decocode GPS signal
 // https://www.arduino.cc/en/Tutorial/SerialEvent
+// written for RoboJax.com, Jan 24, 2017 (on the GitHub)
+
+
+String inputString = ""; // a string to hold incoming data
+boolean stringComplete = false; // whether the string is complete
+String signal = "$GPGLL";// identify begining of the line
+void setup() {
+	// initialize serial:
+	Serial.begin(9600);
+	// reserve 200 bytes for the inputString:
+	inputString.reserve(200);
+}
+
+void loop() {
+	// print the string when a newline arrives:
+	if (stringComplete) {
+		String BB = inputString.substring(0, 6);// get the string $GPGLL from begining of the code
+		if(BB == signal){
+    
+      /////////////////// Latitude Code decoder 
+      String LAT = inputString.substring(7, 17);// get staring from 7 to 17
+      int LATperiod = LAT.indexOf('.');// get position of period (.)
+      int LATzero = LAT.indexOf('0');// get position of zero
+      if(LATzero ==0){
+        LAT = LAT.substring(1);// get the string starting from 1 and not 0 if there is 0 at the begining of LAT
+		  }
+      /////////////////// Latitude Code decoder END
+      
+      /////////////////// Longitude Code decoder 
+      String LON = inputString.substring(20, 31);// get staring from 20 to 31
+      int LONperiod = LON.indexOf('.');// get position of period (.)
+      int LONTzero = LON.indexOf('0');// get position of zero
+      if(LONTzero ==0){
+        LON = LON.substring(1);// get the string starting from 1 and not 0 if there is 0 at the begining of LON
+      }
+      /////////////////// Longitude Code decoder 
+      Serial.println("-- LATITUDE --");// print this text
+      Serial.println(LAT);// print actual Latitude
+      Serial.println("-- LONGITUDE --");// print this text
+      Serial.println(LON);// print actual Longitude
+      Serial.println("============================");// print this to show separate decoded information
+
+		}//if(BB == signal)
+
+    // Serial.println(inputString);
+    // clear the string:
+    inputString = "";
+    stringComplete = false;
+	}//if (stringComplete)
+}// loop
+
+/*
+SerialEvent occurs whenever a new data comes in the
+hardware serial RX. This routine is run between each
+time loop() runs, so using delay inside loop can delay
+response. Multiple bytes of data may be available.
+*/
+void serialEvent() {
+	while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag
+    // so the main loop can do something about it:
+      if (inChar == '\n') {
+      stringComplete = true;
+		  }// if
+	}// while
+}//serialEvent()
