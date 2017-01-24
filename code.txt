@@ -1,0 +1,3 @@
+
+// the original code of serial Event has been taken from and the URL below and new coded added to decocode GPS signal
+// https://www.arduino.cc/en/Tutorial/SerialEvent
